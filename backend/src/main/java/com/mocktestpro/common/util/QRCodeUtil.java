@@ -6,6 +6,9 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
@@ -78,6 +81,22 @@ public class QRCodeUtil {
         } catch (WriterException | IOException e) {
             log.error("Failed to generate QR code: {}", e.getMessage());
             throw new RuntimeException("QR code generation failed", e);
+        }
+    }
+
+    public Claims validateQrJwt(String jwtToken) {
+        try {
+            return Jwts.parser()
+                    .verifyWith(getSigningKey())
+                    .build()
+                    .parseSignedClaims(jwtToken)
+                    .getPayload();
+        } catch (ExpiredJwtException e) {
+            log.warn("QR token expired: {}", e.getMessage());
+            throw e;
+        } catch (JwtException e) {
+            log.warn("Invalid QR token: {}", e.getMessage());
+            throw new RuntimeException("Invalid JWT token", e);
         }
     }
 
