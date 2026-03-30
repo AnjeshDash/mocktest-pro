@@ -17,6 +17,9 @@ public interface TestRepository extends JpaRepository<MockTest, UUID> {
 
     Page<MockTest> findByOrganizer_IdAndIsActiveTrue(UUID organizerId, Pageable pageable);
 
+    // ADD THIS METHOD
+    Page<MockTest> findByTitleContainingIgnoreCaseAndIsPublishedTrueAndIsActiveTrue(String title, Pageable pageable);
+
     @Query("SELECT t FROM MockTest t WHERE t.isPublished = true AND t.isActive = true " +
             "AND (:category IS NULL OR t.category = :category) " +
             "AND (:difficulty IS NULL OR t.difficulty = :difficulty) " +
