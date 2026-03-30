@@ -1,16 +1,7 @@
 package com.mocktestpro.config;
 
-<<<<<<< HEAD
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
-=======
-import io.swagger.v3.oas.models.Components;
-import io.swagger.v3.oas.models.OpenAPI;
-import io.swagger.v3.oas.models.info.Contact;
-import io.swagger.v3.oas.models.info.Info;
-import io.swagger.v3.oas.models.security.SecurityRequirement;
-import io.swagger.v3.oas.models.security.SecurityScheme;
->>>>>>> origin/main
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -19,28 +10,10 @@ public class OpenApiConfig {
 
     @Bean
     public OpenAPI openAPI() {
-<<<<<<< HEAD
-=======
-        SecurityScheme securityScheme = new SecurityScheme()
-                .type(SecurityScheme.Type.HTTP)
-                .scheme("bearer")
-                .bearerFormat("JWT")
-                .description("Enter your Keycloak JWT token");
-
->>>>>>> origin/main
         return new OpenAPI()
                 .info(new Info()
                         .title("MockTest Pro API")
                         .version("1.0.0")
-<<<<<<< HEAD
                         .description("Mock Test Simulator API"));
-=======
-                        .description("Complete Mock Test Simulator API")
-                        .contact(new Contact()
-                                .name("MockTest Pro Team")
-                                .email("dev@mocktestpro.com")))
-                .addSecurityItem(new SecurityRequirement().addList("Bearer Authentication"))
-                .components(new Components().addSecuritySchemes("Bearer Authentication", securityScheme));
->>>>>>> origin/main
     }
 }
