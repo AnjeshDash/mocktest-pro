@@ -6,6 +6,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.oauth2.server.resource.web.BearerTokenAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -14,9 +15,11 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     private final JwtAuthConverter jwtAuthConverter;
+    private final KeycloakUserSyncFilter userSyncFilter;
 
-    public SecurityConfig(JwtAuthConverter jwtAuthConverter) {
+    public SecurityConfig(JwtAuthConverter jwtAuthConverter, KeycloakUserSyncFilter userSyncFilter) {
         this.jwtAuthConverter = jwtAuthConverter;
+        this.userSyncFilter = userSyncFilter;
     }
 
     @Bean
@@ -30,7 +33,8 @@ public class SecurityConfig {
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2
                         .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthConverter))
-                );
+                )
+                .addFilterAfter(userSyncFilter, BearerTokenAuthenticationFilter.class);
         return http.build();
     }
 }

@@ -32,7 +32,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByKeycloakId(keycloakId)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "keycloakId", keycloakId));
 
-        userRepository.updateLastLoginAt(keycloakId, LocalDateTime.now());
+        // REMOVED: userRepository.updateLastLoginAt(keycloakId, LocalDateTime.now());
         return UserResponseDTO.fromEntity(user);
     }
 
