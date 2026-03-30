@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.server.resource.web.BearerTokenAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
@@ -16,16 +17,21 @@ public class SecurityConfig {
 
     private final JwtAuthConverter jwtAuthConverter;
     private final KeycloakUserSyncFilter userSyncFilter;
+    private final CorsConfig corsConfig;
 
-    public SecurityConfig(JwtAuthConverter jwtAuthConverter, KeycloakUserSyncFilter userSyncFilter) {
+    public SecurityConfig(JwtAuthConverter jwtAuthConverter,
+                          KeycloakUserSyncFilter userSyncFilter,
+                          CorsConfig corsConfig) {
         this.jwtAuthConverter = jwtAuthConverter;
         this.userSyncFilter = userSyncFilter;
+        this.corsConfig = corsConfig;
     }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
+                .cors(cors -> cors.configurationSource(corsConfig.corsConfigurationSource()))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/health/**").permitAll()
